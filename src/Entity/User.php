@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\ApiResource;
 
 use App\Repository\UserRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource]
 class User
 {
     #[ORM\Id]
@@ -23,7 +25,7 @@ class User
     {
         return $this->id;
     }
-    
+
     public function getName(): ?string
     {
         return $this->name;
