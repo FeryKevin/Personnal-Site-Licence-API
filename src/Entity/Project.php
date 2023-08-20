@@ -27,6 +27,12 @@ class Project
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $github = null;
 
+    #[ORM\OneToMany(targetEntity: Technlogy::class, mappedBy: 'project')]
+    private Collection $technologies;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: File::class, cascade: ["persist", "remove"])]
+    private Collection $files;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +82,64 @@ class Project
     public function setGithub(?string $github = null): self
     {
         $this->github = $github;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Technology>
+     */
+    public function getTechnologies(): Collection
+    {
+        return $this->technologies;
+    }
+
+    public function addTechnology(Technology $technology): self
+    {
+        if (!$this->technologies->contains($technology)) {
+            $this->technologies->add($technology);
+            $technology->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnology(Technology $technology): self
+    {
+        if ($this->technologies->removeElement($technology)) {
+            if ($technology->getProject() === $this) {
+                $technology->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, File>
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+            $file->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->removeElement($file)) {
+            if ($file->getProject() === $this) {
+                $file->setProject(null);
+            }
+        }
 
         return $this;
     }

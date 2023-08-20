@@ -18,6 +18,10 @@ class Technology
     #[ORM\Column(length: 255, unique: true, nullable: false)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne(inversedBy: 'files')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $project = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +35,18 @@ class Technology
     public function setName(?string $name = null): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }
